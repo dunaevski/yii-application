@@ -6,7 +6,7 @@
     <br>
 </p>
 
- run <h3> php init </h3> and <h3>composer update </h3> in app folder
+ run <strong> php init </strong> and <strong>composer update </strong> in app folder
 
 for frontend /path/to/yii-application/frontend/web/ and using the URL http://frontend.test/ 
 <br />
