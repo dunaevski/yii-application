@@ -6,7 +6,10 @@
     <br>
 </p>
 
-<h3> run  <strong>php init </strong> and <strong>composer update </strong> in app folder </h3>
+<h3> run  <span style="color: 'red' ">php init </span> and <span style="color: 'red' ">composer update </span> in app folder </h3>
+
+for frontend /path/to/yii-application/frontend/web/ and using the URL http://frontend.test/
+for backend /path/to/yii-application/backend/web/ and using the URL http://backend.test/
 
 [![Latest Stable Version](https://img.shields.io/packagist/v/yiisoft/yii2-app-advanced.svg)](https://packagist.org/packages/yiisoft/yii2-app-advanced)
 [![Total Downloads](https://img.shields.io/packagist/dt/yiisoft/yii2-app-advanced.svg)](https://packagist.org/packages/yiisoft/yii2-app-advanced)
