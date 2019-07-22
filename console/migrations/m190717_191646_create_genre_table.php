@@ -1,0 +1,31 @@
+<?php
+
+use yii\db\Migration;
+
+/**
+ * Handles the creation of table `{{%genre}}`.
+ */
+class m190717_191646_create_genre_table extends Migration
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function safeUp()
+    {
+        $this->createTable('{{%genre}}', [
+            'id' => $this->primaryKey(),
+            'name'=> $this->string(32)->notNull(),
+
+            'created_at' => $this->integer()->notNull(),
+            'updated_at' => $this->integer()->notNull(),
+        ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function safeDown()
+    {
+        $this->dropTable('{{%genre}}');
+    }
+}
