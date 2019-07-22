@@ -39,6 +39,13 @@ $this->title = 'Главная Администрация';
                 <?= Html::a('Посмотреть', ['genre/index'],['class' => 'btn btn-lg btn-success'])?>
             </div>
 
+
+            <div class="col-lg-3">
+                <h2> Коментарии </h2>
+
+                <?= Html::a('Посмотреть', ['comment/manage'],['class' => 'btn btn-lg btn-success'])?>
+            </div>
+
         </div>
 
     </div>

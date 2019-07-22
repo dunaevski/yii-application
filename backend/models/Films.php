@@ -48,6 +48,7 @@ class Films extends ActiveRecord
             [['director_id'], 'integer'],
             [['name', 'url'], 'string', 'max' => 32],
             [['year'], 'string', 'max' => 10],
+            [['url'], 'unique'],
             [['director_id'], 'exist', 'skipOnError' => true, 'targetClass' => Director::className(), 'targetAttribute' => ['director_id' => 'id']],
             [['genre_arr'], 'safe'],
         ];

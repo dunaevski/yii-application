@@ -33,7 +33,7 @@ use yii\widgets\ActiveForm;
     ]);
     ?>
 
-    <?= $form->field($model, 'url', ['options'=>['class'=> 'col-xs-12']])->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'url', ['options'=>['class'=> 'col-xs-12']])->textInput(['maxlength' => true])->label("URL (Введите свой или оставте поле пустым)") ?>
 
     <div class="form-group">
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success ']) ?>
