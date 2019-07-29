@@ -1,24 +1,15 @@
 <?php
 
 /* @var $this yii\web\View */
-/* @var $film frontend\controllers\FilmsController */
+/* @var $film frontend\controllers\CommentController */
+/** @var $comments frontend\controllers\CommentController */
 
-use app\models\Films;
-use yii\helpers\ArrayHelper;
+/** @var $commentForm frontend\controllers\CommentController */
+
+use app\components\CommentWidget;
 use yii\helpers\Html;
 
 $this->title = $film->name;
-$fullName = ArrayHelper::getValue($film->director, function ($user, $defaultValue) {
-    return $user->name . ' ' . $user->surname;
-});
-
-$filmGenre ="";
-
-foreach ( $film->genres as $genre) {
-    $filmGenre = ArrayHelper::getValue($genre, 'name').", ".$filmGenre;
-}
-
-$model = Films::find()->where(['id' => $film->id])->one();
 
 ?>
 <div class="site-index">
@@ -30,8 +21,10 @@ $model = Films::find()->where(['id' => $film->id])->one();
     <div class="row">
         <div class="col-4">
             <h3>Год создания:   <span> <?= Html::encode($film->year) ?></span> </h3>
-            <h3>Режисер:   <span> <?= Html::encode($fullName) ?></span><h3>
-            <h3>Жанр:   <span> <?= Html::encode(rtrim($filmGenre,", ")) ?></span><h3>
+            <h3>Режисер: <span> <?= Html::encode($film->getFullName()) ?></span>
+                <h3>
+                    <h3>Жанр: <span> <?= Html::encode(rtrim($film->getAllGenres(), ", ")) ?></span>
+                        <h3>
 
         </div>
     </div>
@@ -47,11 +40,12 @@ $model = Films::find()->where(['id' => $film->id])->one();
         </div>
 
         <div class="row">
-            <?php echo \yii2mod\comments\widgets\Comment::widget([
-                'model' => $model,
-            ]); ?>
+            <?= CommentWidget::widget([
+                'comments' => $comments,
+                'commentForm' => $commentForm,
+                'film' => $film
+            ]) ?>
         </div>
-
     </div>
 
 </div>

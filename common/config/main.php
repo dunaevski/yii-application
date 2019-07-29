@@ -24,9 +24,9 @@ return [
             ],
         ],
     ],
-    'modules' => [
-        'comment' => [
-            'class' => 'yii2mod\comments\Module',
-        ],
-    ],
+//    'modules' => [
+//        'comment' => [
+//            'class' => 'yii2mod\comments\Module',
+//        ],
+//    ],
 ];

@@ -2,10 +2,12 @@
 
 namespace app\models;
 
+use common\models\Comment;
 use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "films".
@@ -103,4 +105,34 @@ class Films extends ActiveRecord
     {
         return $this->hasMany(Genre::className(), ['id' => 'genre_id'])->viaTable('films_genre', ['films_id' => 'id']);
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getComments()
+    {
+        return $this->hasMany(Comment::className(), ['film_id' => 'id']);
+    }
+
+
+    public function getFullName() {
+
+        $fullName = ArrayHelper::getValue($this->director, function ($user, $defaultValue) {
+            return $user->name . ' ' . $user->surname;
+        });
+
+        return $fullName;
+
+    }
+
+
+    public function getAllGenres() {
+        $filmGenre ="";
+
+        foreach ( $this->genres as $genre) {
+            $filmGenre = ArrayHelper::getValue($genre, 'name').", ".$filmGenre;
+        }
+        return $filmGenre;
+    }
+
 }

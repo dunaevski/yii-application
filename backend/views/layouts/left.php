@@ -23,7 +23,7 @@
                     ['label' => 'Фильмы', 'icon' => 'film', 'url' => ['/films']],
                     ['label' => 'Жанры', 'icon' => 'photo', 'url' => ['/genre']],
                     ['label' => 'Режиссеры', 'icon' => 'camera', 'url' => ['/director']],
-                    ['label' => 'Коментарии', 'icon' => 'comment', 'url' => ['/comment/manage']],
+                    ['label' => 'Коментарии', 'icon' => 'comment', 'url' => ['/comment']],
                     ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug']],
                     ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii']],
                     ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],

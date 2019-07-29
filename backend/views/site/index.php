@@ -18,7 +18,7 @@ $this->title = 'Главная Администрация';
     <div class="body-content">
 
         <div class="row">
-          
+
             
             <div class="col-lg-3">
                 <h2> Фильмы </h2>

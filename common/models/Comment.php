@@ -2,34 +2,38 @@
 
 namespace common\models;
 
+use app\models\Films;
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
 
 /**
- * This is the model class for table "Comment".
+ * This is the model class for table "comment".
  *
  * @property int $id
- * @property string $entity
- * @property int $entityId
- * @property string $content
+ * @property string $text
  * @property int $parentId
- * @property int $level
- * @property int $createdBy
- * @property int $updatedBy
- * @property string $relatedTo
- * @property string $url
+ * @property int $user_id
  * @property int $status
- * @property int $createdAt
- * @property int $updatedAt
+ * @property int $created_at
+ * @property int $updated_at
+ * @property int $film_id
+ *
+ * @property Films $film
+ * @property User $user
  */
-class Comment extends \yii\db\ActiveRecord
+class Comment extends ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'Comment';
+        return 'comment';
     }
+
+    protected $children;
 
     /**
      * {@inheritdoc}
@@ -37,11 +41,29 @@ class Comment extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['entity', 'entityId', 'content', 'createdBy', 'updatedBy', 'relatedTo', 'createdAt', 'updatedAt'], 'required'],
-            [['entityId', 'parentId', 'level', 'createdBy', 'updatedBy', 'status', 'createdAt', 'updatedAt'], 'integer'],
-            [['content', 'url'], 'string'],
-            [['entity'], 'string', 'max' => 10],
-            [['relatedTo'], 'string', 'max' => 500],
+            [['parentId', 'user_id', 'status', 'created_at', 'updated_at', 'film_id'], 'integer'],
+            [['text'], 'string', 'max' => 255],
+            [
+                ['film_id'],
+                'exist',
+                'skipOnError' => true,
+                'targetClass' => Films::className(),
+                'targetAttribute' => ['film_id' => 'id']
+            ],
+            [
+                ['user_id'],
+                'exist',
+                'skipOnError' => true,
+                'targetClass' => User::className(),
+                'targetAttribute' => ['user_id' => 'id']
+            ],
+        ];
+    }
+
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),
         ];
     }
 
@@ -52,18 +74,99 @@ class Comment extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'entity' => 'Entity',
-            'entityId' => 'Entity ID',
-            'content' => 'Content',
-            'parentId' => 'Parent ID',
-            'level' => 'Level',
-            'createdBy' => 'Created By',
-            'updatedBy' => 'Updated By',
-            'relatedTo' => 'Related To',
-            'url' => 'Url',
-            'status' => 'Status',
-            'createdAt' => 'Created At',
-            'updatedAt' => 'Updated At',
+            'text' => 'Комментарий',
+            'parentId' => 'ID Родителя',
+            'user_id' => 'Пользователь',
+            'film_id' => 'Фильм',
+            'status' => 'Статус',
+            'created_at' => 'Дата Создания',
+            'updated_at' => 'Дата Изменения',
         ];
     }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getFilm()
+    {
+        return $this->hasOne(Films::className(), ['id' => 'film_id']);
+    }
+
+    public function getFilmName() {
+
+        return isset($this->film)?$this->film->name:"Ошибка связи";
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    public function getUserName() {
+
+        return isset($this->user)?$this->user->username:"Ошибка связи";
+    }
+
+    public function getDate()
+    {
+        return Yii::$app->formatter->asDateTime($this->updated_at);
+
+    }
+
+    /**
+     * @return array|null|ActiveRecord[]
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * @param $value
+     */
+    public function setChildren($value)
+    {
+        $this->children = $value;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasChildren()
+    {
+        return !empty($this->children);
+    }
+
+    protected static function buildTree(&$data, $rootID = null)
+    {
+        $tree = [];
+        foreach ($data as $id => $node) {
+            if ($node->parentId == $rootID) {
+                unset($data[$id]);
+                $node->children = self::buildTree($data, $node->id);
+                $tree[] = $node;
+            }
+        }
+        return $tree;
+    }
+
+    public static function getTree($filmID)
+    {
+        return self::buildTree($filmID);
+    }
+
+
+    public function beforeDelete()
+    {
+        if(parent::beforeDelete()) {
+            self::deleteAll(['parentId'=> $this->id]);
+            return true;
+        }
+        else
+            return false;
+    }
+
 }
